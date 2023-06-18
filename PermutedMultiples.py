@@ -28,11 +28,7 @@ def find_next_x(n):
 
 def main():
     x = 10
-    n = 0
     while True:
-        if x - n > 1000000:
-            n = x
-            print(x)
         for i in range(2, 6):
             if not (are_permutations(str(x), str(x * i))):
                 x = find_next_x(x)
