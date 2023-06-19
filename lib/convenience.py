@@ -18,3 +18,10 @@ def reverse_number(num):
 
 def is_palindrome(num):
     return num == reverse_number(num)
+
+def sum_digits(num):
+    # Convert the number to a string to be able to iterate over the digits
+    num_str = str(num)
+    
+    # Use a list comprehension to convert each digit back to an integer and sum them
+    return sum(int(digit) for digit in num_str)
