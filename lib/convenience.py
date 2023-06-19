@@ -25,3 +25,6 @@ def sum_digits(num):
     
     # Use a list comprehension to convert each digit back to an integer and sum them
     return sum(int(digit) for digit in num_str)
+
+def count_digits(num):
+    return len(str(num))
