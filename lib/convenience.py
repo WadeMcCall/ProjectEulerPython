@@ -12,3 +12,9 @@ def XchooseN(x, n):
         return 1
     assert x > n, "x must be larger than or equal to n"
     return factorial(x)/ (factorial(n) * factorial(x - n))
+
+def reverse_number(num):
+    return int(str(num)[::-1])
+
+def is_palindrome(num):
+    return num == reverse_number(num)
