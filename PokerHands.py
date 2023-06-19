@@ -7,6 +7,63 @@ class PokerHand:
     cards = []
     handType = 0
 
+    def __gt__(self, other):
+        if self.handType > other.handType:
+            return True
+        if self.handType < other.handType:
+            return False
+        
+        assert self.handType == other.handType
+
+        
+        values = [card.intNum for card in self.cards]
+        oValues = [card.intNum for card in other.cards]
+
+        values.sort(reverse=True)
+        oValues.sort(reverse=True)
+
+        if self.handType == 0:
+            for i in range(len(values)):
+                if values[i] != oValues[i]:
+                    return values[i] > oValues[i]
+            return False
+
+        valuePair = 0
+        oValuePair = 0
+        
+        # both players have a pair
+        if self.handType == 1:
+            value_counts = {value: values.count(value) for value in values}
+            oValue_counts = {value: oValues.count(value) for value in oValues}
+
+            # Iterate over the items in the dictionary
+            for key, value in value_counts.items():
+                # If the value is 2, return the key
+                if value == 2:
+                    valuePair = key  
+                    break
+
+            # Iterate over the items in the dictionary
+            for key, value in oValue_counts.items():
+                # If the value is 2, return the key
+                if value == 2:
+                    oValuePair = key  
+                    break
+            
+            if valuePair != oValuePair:
+                return valuePair > oValuePair
+            
+            
+            for i in range(len(values)):
+                if values[i] != oValues[i]:
+                    return values[i] > oValues[i]
+            return False
+        
+        # rest of the hands don't matter since this print is never reached
+        print("we've got some 'splaining to do!~ " + str(self.handType))
+
+        return True
+
     def __str__(self):
         Hand = ""
         match self.handType:
@@ -207,11 +264,14 @@ def getHands(cardsStr):
     return p1, p2
 
 def main():
-    f = open("data/testPoker.txt", "r")
+    f = open("data/poker.txt", "r")
+    sum = 0
     for x in f:
         p1, p2 = getHands(x)
-        print("p1: " + str(p1) + " p2: " + str(p2))
+        if p1 > p2:
+            sum += 1
 
+    print(sum)
     return
 
 if __name__ == "__main__":
