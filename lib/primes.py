@@ -9,6 +9,7 @@ class Primes:
         self.sieve_of_eratosthenes(new_max)
         self.max_sieved = new_max
 
+    # don't use unless you are using the rest of this class and need to generate primes. Use the lone function below!
     def isPrime(self, x):
         while(x > max(self.primes)):
             self._grow()

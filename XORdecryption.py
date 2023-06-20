@@ -1,10 +1,7 @@
 from itertools import cycle
 
 def average_word_length(words):
-    # Sum the lengths of all the words
     total_length = sum(len(word) for word in words)
-    
-    # Divide by the number of words
     average_length = total_length / len(words)
     
     return average_length
@@ -40,7 +37,6 @@ def main():
                 msg = (arrToMsg(tempVals))
                 if(isEnglish(msg)):
                     print(sum(tempVals))
-                
 
 if __name__ == "__main__":
     main()
