@@ -23,9 +23,7 @@ def getXTermsinEContinuedFraction(x):
 
 def main():
     series = getXTermsinEContinuedFraction(100)
-    print(series)
     f = Fraction(1, series.pop())
-    print(f)
 
     while len(series) > 0:
         f += series.pop()
