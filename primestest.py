@@ -1,8 +1,6 @@
-from lib.primes import Primes
-primes = Primes(100)
+from lib.Polynomial import Polynomial
 
-generator = primes.getNextPrimeGenerator(1000)
-for prime in generator:
-    if(prime > 5000):
-        break
-    print(prime)
+p = Polynomial([1, 2, 3])
+print(p)
+print(p(2))
+print(p + 3)

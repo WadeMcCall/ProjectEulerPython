@@ -2,68 +2,53 @@
 import math
 from decimal import *
 
-class ContinuedFraction:
+class ContinuedSqrtFraction:
     def __init__(self, numToSqrt):
         self.sqrt = numToSqrt
         self.integerPart = math.floor(math.sqrt(numToSqrt))
-        self.periodPart = self._calculatePeriodPart(numToSqrt)
-
-    def _calculatePeriodPart(self, numToSqrt):
-        a = self.integerPart
-        remainder = math.sqrt(numToSqrt) - a
-
-        return self._calculatePeriodPartHelper(remainder, [])
-    
-    def _calculatePeriodPartHelper(self, remainder, integerList):
-        firstRemainder = remainder
-        while True:
-            newNum = 1 /remainder
-            newA = math.floor(newNum)
-            integerList.append(newA)
-            if math.isclose(firstRemainder, newNum - newA, rel_tol=.0001):
-                return integerList
-            remainder = newNum - newA
+        self.calculatePeriodicPart()
     
     def getPeriodOfSquareRoot(self):
-        return len(self.periodPart)
+        return len(self.periodicPart)
     
+    def _reduceTerms(self, sqrtPortion, constantPortion, denominator):
+        gcd = math.gcd(sqrtPortion, denominator, constantPortion)
+        return sqrtPortion // gcd, constantPortion // gcd, denominator // gcd
 
-"""  ____         n - a ^ 2
--\  /     =  a + -----------
-  \/  n            a + sqrt(n)
-"""
+    def calculatePeriodicPart(self):
+        n = self.sqrt
+        a = math.floor(math.sqrt(n))
 
-def calculatePeriodOfSqrt(numSqrt):
-    n = numSqrt
-    a = math.floor(math.sqrt(n))
-
-    firstRemainder = math.sqrt(n) - a
-    remainder = firstRemainder
-    integerList = [a]
-    sqrtPortion = 1
-    constantPortion = -a
-    while True:
-        constantPortion = -1 * constantPortion
-        denominator = numSqrt - constantPortion ** 2
-        a = math.floor((sqrtPortion * (math.sqrt(n) + constantPortion)) / denominator)
-        integerList.append(a)
-
-
+        firstRemainder = math.sqrt(n) - a
+        remainder = firstRemainder
+        integerList = []
+        sqrtPortion = 1
+        constantPortion = -a
+        denominator = 1
+        while True:
+            prevConstantPortion = constantPortion
+            constantPortion =  denominator * constantPortion * -1
+            sqrtPortion = sqrtPortion * denominator
+            denominator = self.sqrt - prevConstantPortion ** 2
+            sqrtPortion, constantPortion, denominator = self._reduceTerms(sqrtPortion, constantPortion, denominator)
+            evaluation = (sqrtPortion * (math.sqrt(n)) + constantPortion) / denominator
+            a = math.floor(evaluation)
+            integerList.append(a)
+            remainder = evaluation - a
+            if math.isclose(remainder, firstRemainder, rel_tol=.0001):
+                break
+            constantPortion = constantPortion - a * denominator
+        self.periodicPart = integerList
 
 def main():
     numOddPeriods = 0
-    for i in range(1, 14):
+    for i in range(1, 10001):
         if math.sqrt(i) % 1 == 0:
             continue
-        length, period = calculatePeriodOfSqrt(i)
-        if(length > 30):
-            print(i)
-        if length % 2 == 1:
+        cf = ContinuedSqrtFraction(i)
+        if cf.getPeriodOfSquareRoot() % 2 == 1:
             numOddPeriods += 1
     print(numOddPeriods)
-    # cf = ContinuedFraction(94)
-    # print(cf.periodPart)
-    # print(cf.getPeriodOfSquareRoot())
 
 if __name__ == "__main__":
     main()

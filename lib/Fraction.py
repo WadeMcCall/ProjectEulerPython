@@ -1,3 +1,5 @@
+import math
+
 class Fraction:
     def __init__(self, numerator, denominator):
         self.numerator = numerator
@@ -6,10 +8,13 @@ class Fraction:
     def __add__(self, x):
         if type(x) is Fraction:
             return NotImplementedError
-        if type(x) is not int:
-            return NotImplementedError
         self.numerator += x * self.denominator
         return self
+    
+    def reduce(self):
+        gcd = math.gcd(self.numerator, self.denominator)
+        self.numerator //= gcd
+        self.denominator //= gcd
 
     def reciprocal(self):
         return Fraction(self.denominator, self.numerator)
