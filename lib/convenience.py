@@ -1,3 +1,5 @@
+# A collection of useful functions that i havent categorized into another file yet
+
 from collections import Counter
 from math import factorial, sqrt
 from functools import reduce
