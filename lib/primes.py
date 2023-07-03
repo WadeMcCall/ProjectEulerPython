@@ -55,6 +55,15 @@ class Primes:
         
         self.max_sieved = n
 
+# wrap the generator so I dont have to mess with the class...
+def getNextPrimeGenerator(x = None):
+    if x is None:
+        x = 1
+    primes = Primes(100)
+    gen = primes.getNextPrimeGenerator(x)
+    for prime in gen:
+        yield prime
+
 def isPrime(n):
     if n <= 1:
         return False
