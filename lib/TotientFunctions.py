@@ -26,5 +26,8 @@ def phi(x):
             coprimesArr[i] = False
     return len([i for i in coprimesArr if i is True])
 
+def is_coprime(x, y):
+    return math.gcd(x, y) == 1
+
 # def phi(x):
 #     return len([i for i in range(2,x) if math.gcd(i, x) == 1])
