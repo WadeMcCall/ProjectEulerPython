@@ -1,6 +1,4 @@
-from lib.Fraction import Fraction
+from lib.convenience import factors
 
-f1 = Fraction(3, 2)
-f2 = Fraction(1, 6)
 
-print(f1 + f2)
+print(factors(7919))
