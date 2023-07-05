@@ -1,3 +1,6 @@
+def pentagonalNumber(n):
+    return int(n * ((3*n - 1) / 2))
+
 def SquareNumberGen():
     n = 1
     while True:
@@ -13,7 +16,7 @@ def triangleNumberGen():
 def pentagonalNumberGen():
     n = 1
     while True:
-        yield n * ((3*n - 1) / 2)
+        yield pentagonalNumber(n)
         n += 1
 
 def hexagonalNumberGen():
