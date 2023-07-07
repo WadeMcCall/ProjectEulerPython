@@ -3,6 +3,7 @@
 from collections import Counter
 from math import factorial, sqrt
 from functools import reduce
+from lib.primes import getNextPrimeGenerator
 
 def have_common_elements(list1, list2):
     return any(element in set(list2) for element in list1)
@@ -34,6 +35,18 @@ def count_digits(num):
 
 # Steiner Lima's answer here: https://stackoverflow.com/questions/6800193/what-is-the-most-efficient-way-of-finding-all-the-factors-of-a-number-in-python
 def factors(n):
-        step = 2 if n%2 else 1
-        return set(reduce(list.__add__,
-                    ([i, n//i] for i in range(1, int(sqrt(n))+1, step) if n % i == 0)))
+    step = 2 if n%2 else 1
+    return set(reduce(list.__add__,
+                ([i, n//i] for i in range(1, int(sqrt(n))+1, step) if n % i == 0)))
+
+def primeFacs(x):
+    gen = getNextPrimeGenerator
+    facs = {}
+    for i in gen():
+        while x % i == 0:
+            if i not in facs:
+                facs[i] = 0
+            facs[i] += 1
+            x = x // i
+        if x == 1:
+            return facs

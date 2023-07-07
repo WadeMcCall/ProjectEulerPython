@@ -55,6 +55,11 @@ class Primes:
         
         self.max_sieved = n
 
+def getPrimeArray(x):
+    assert(type(x) is int)
+    primes = Primes(x)
+    return primes.primes
+
 # wrap the generator so I dont have to mess with the class...
 def getNextPrimeGenerator(x = None):
     if x is None:
