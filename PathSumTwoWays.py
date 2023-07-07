@@ -7,6 +7,16 @@ def getMatrix():
         matrix.append([int(x) for x in line.split(",")])
     return matrix
 
+def getNeighbors(matrix, row, column):
+    assert(row >= 0 and row < len(matrix))
+    assert(column >= 0 and column < len(matrix[0]))
+    vals = []
+    if row > 0:
+        vals.append(matrix[row-1][column])
+    if column > 0:
+        vals.append(matrix[row][column-1])
+    return vals
+
 def addForcedPaths(matrix):
     newMatrix = copy.deepcopy(matrix)
     for row in range(len(matrix) - 1):
@@ -16,12 +26,13 @@ def addForcedPaths(matrix):
         for column in range(len(matrix[row])):
             if(row == 0 or column == 0):
                 continue
-            newMatrix[row][column] += min(newMatrix[row-1][column], newMatrix[row][column-1])
+            neighbors = getNeighbors(newMatrix, row, column)
+            newMatrix[row][column] += min(neighbors)
     return newMatrix
 
 def main():
     matrix = getMatrix()
-    print(addForcedPaths(matrix))
+    print(addForcedPaths(matrix)[-1][-1])
     return
 
 if __name__ == '__main__':
