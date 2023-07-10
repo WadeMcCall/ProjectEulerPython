@@ -32,6 +32,7 @@ def sum_digits(num):
 
 def count_digits(num):
     return len(str(num))
+            
 
 # Steiner Lima's answer here: https://stackoverflow.com/questions/6800193/what-is-the-most-efficient-way-of-finding-all-the-factors-of-a-number-in-python
 def factors(n):
