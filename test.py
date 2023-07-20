@@ -1,5 +1,5 @@
-from lib.RomanNumeral import RomanNumeral
+from lib.Fraction import Fraction
 
-RomanNumeral("CMLXIX")
-RomanNumeral("XLIX")
-RomanNumeral("MCCCCCCCCCVIII")
+v = Fraction(795, 180)
+v.reduce()
+print(v.mixedForm())

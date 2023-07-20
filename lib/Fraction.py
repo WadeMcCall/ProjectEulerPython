@@ -29,6 +29,12 @@ class Fraction:
             return self
         return NotImplementedError
     
+    def mixedForm(self):
+        if self.numerator > self.denominator:
+            return str(self.numerator // self.denominator) + " " + str(self.numerator % self.denominator) + "/" + str(self.denominator)
+        else:
+            return str(self.numerator) + "/" + str(self.denominator)
+    
     def __str__(self):
         return str(self.numerator) + "/" + str(self.denominator)
     

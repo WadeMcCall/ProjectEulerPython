@@ -1,5 +1,5 @@
 from lib.primes import Primes
-from itertools import combinations, permutations
+from itertools import permutations
 
 primes = Primes(1000000)
 
@@ -15,24 +15,12 @@ def replace_asterisks_with_digits(s):
 
     return result
 
-def replace_digits_with_asterisks(num, x):
-    num = str(num)
-    num_length = len(num)
-    result = []
-
-    # Iterate over all possible combinations of x positions within the number
-    for combo in combinations(range(num_length - 1), x):  # Exclude the last digit
-        replaced_num = list(num)  # Convert to list for easy replacement
-        for index in combo:
-            replaced_num[index] = '*'
-        result.append(''.join(replaced_num))
-
-    return result
-
 def checkForNReplacedPrimes(primeStr, n):
     replacedDigits = replace_asterisks_with_digits(primeStr)
     numPrimes = 0
     for num in replacedDigits:
+        if num[0] == '0':
+            continue
         if primes.isPrime(int(num)):
             numPrimes += 1
             if(numPrimes == n):
@@ -59,22 +47,27 @@ def add_asterisks(num, x):
     # Create a string with the original number plus the needed asterisks
     num_str_with_asterisks = num_str + '*' * num_asterisks
 
-    # Now generate all permutations, filter those that have an asterisk in the first or last position
-    result = [''.join(p) for p in permutations(num_str_with_asterisks) if p[0] != '*' and p[-1] != '*']
+    # Now generate all permutations, filter those that have an asterisk in the last position
+    result = [''.join(p) for p in permutations(num_str_with_asterisks) if p[-1] != '*' and int(p[-1]) % 2 != 0 and int(p[-1]) % 5 != 0]
+
+    result = list(set(result))
 
     return result
 
 
 def main():
-    for i in range(10000):
+    for i in range(1000000):
         numsTocheck = []
         if(i % 2 == 0 or i % 5 == 0 or i%10 == 0):
             continue  
-        for j in range(len(str(i)), 6):
+        for j in range(len(str(i)), 7):
             numsTocheck = add_asterisks(i, j)
-            print(numsTocheck)
         for num in numsTocheck:
-            if(checkForNReplacedPrimes(num, 6)):
+            if num[0] == "0":
+                continue
+            if num[-1] == "*":
+                continue
+            if(checkForNReplacedPrimes(num, 8)):
                 print(num)
                 return
 
