@@ -40,6 +40,17 @@ def factors(n):
     return set(reduce(list.__add__,
                 ([i, n//i] for i in range(1, int(sqrt(n))+1, step) if n % i == 0)))
 
+def primeFactors(x):
+    gen = getNextPrimeGenerator
+    facs = []
+    for i in gen():
+        while x % i == 0:
+            if i not in facs:
+                facs.append(i)
+            x = x // i
+        if x == 1:
+            return facs
+
 def primeFacs(x):
     gen = getNextPrimeGenerator
     facs = {}

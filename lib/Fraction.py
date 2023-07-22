@@ -2,10 +2,13 @@ import math
 
 class Fraction:
     def __init__(self, numerator, denominator):
+        assert type(numerator) is int and type(denominator) is int
         self.numerator = numerator
         self.denominator = denominator
     
     def reduce(self):
+        if self.numerator == 0 or self.denominator == 0:
+            return
         gcd = math.gcd(self.numerator, self.denominator)
         self.numerator //= gcd
         self.denominator //= gcd
@@ -14,6 +17,7 @@ class Fraction:
         return Fraction(self.denominator, self.numerator)
 
     def evaluate(self):
+        assert self.denominator != 0
         return self.numerator / self.denominator
 
     def __add__(self, x):
@@ -48,6 +52,7 @@ class Fraction:
             temp.reduce()
             return temp.numerator == x.numerator and temp.denominator == x.denominator
         return self.evaluate() == x
+    
     def __ne__(self, x):
         return not self.__eq__(x)
     
