@@ -34,6 +34,9 @@ def count_digits(num):
     return len(str(num))
             
 
+def properFactors(n):
+    return factors(n) - {n}
+
 # Steiner Lima's answer here: https://stackoverflow.com/questions/6800193/what-is-the-most-efficient-way-of-finding-all-the-factors-of-a-number-in-python
 def factors(n):
     step = 2 if n%2 else 1
