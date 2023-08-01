@@ -1,3 +1,5 @@
+from lib.Fraction import Fraction
+
 superScriptDigits = {"": "",
                      0: '⁰',
                      1: '¹',
@@ -11,6 +13,8 @@ superScriptDigits = {"": "",
                      9: '⁹'}
 
 def numToSuperScript(num):
+    if num == 1:
+        return ""
     return "".join([superScriptDigits[int(digit)] for digit in str(num)])
 
 class Polynomial:
@@ -18,10 +22,36 @@ class Polynomial:
         assert isinstance(coefficients, list)
         if isReversed:
             coefficients = list(reversed(coefficients))
-        self.coefficients = coefficients
-        self._trimCoefficients()
-        
+        self.coefficients = self._createCoefficients(coefficients)
+        self._trimCoefficients()        
         self.variable = variable
+
+    #lagrange interpolation
+    @staticmethod
+    def polyFit(points):
+        finalPoly = Polynomial([0])
+        for i, (xi, yi) in enumerate(points):
+            poly = 1
+            for j, (xj, yj) in enumerate(points):
+                if i != j:
+                    term = Polynomial([1, -xj])
+                    denominator = xi - xj
+                    if denominator == 0:
+                        continue
+                    term /= denominator
+                    poly = term * poly
+            poly *= yi
+            finalPoly += poly
+            print(finalPoly)
+        return finalPoly
+
+    def _createCoefficients(self, coefficients):
+        result = []
+        for coeff in coefficients:
+            if not isinstance(coeff, Fraction):
+                coeff = Fraction(coeff)
+            result.append(coeff)
+        return result
 
     def _trimCoefficients(self):
         while self.coefficients[-1] == 0 and len(self.coefficients) > 1:
@@ -71,19 +101,36 @@ class Polynomial:
         
     def __truediv__(self, other):
         if isinstance(other, Polynomial):
-            return NotImplementedError
+            raise NotImplementedError
         else:
             return Polynomial([a / other for a in self.coefficients], isReversed=False, variable=self.variable)
 
     def __call__(self, x):
-        return sum([a * x ** i for i, a in enumerate(self.coefficients)])
+        return sum([a * x ** i for i, a in enumerate(self.coefficients)]).evaluate()
     
     def __repr__(self):
         return f"Polynomial({str(self)})"
 
+    # this.. is a mess
     def __str__(self):
+        def addFirstTerm(coeff, degree, ret):
+            if degree == 0:
+                ret += str(coeff)
+                return ret
+            if coeff == 1:
+                coeff = ""
+            if coeff == -1:
+                coeff = "-"
+            if not isinstance(coeff, str):
+                if coeff.denominator == 1:
+                    coeff = coeff.numerator
+                coeff = str(coeff)
+            ret += f"{coeff}{self.variable}{numToSuperScript(degree)}"
+            return ret
+
         def addTerm(coeff, degree, ret):
-            if coeff == 0:
+            coeff = coeff.reduce()
+            if coeff == 0 or coeff == None:
                 return ret
             if ret != "":
                 if coeff < 0:
@@ -91,27 +138,26 @@ class Polynomial:
                 else:
                     ret += " + "
             if degree == 0:
-                if ret == "":
-                    ret += str(coeff)
-                else:
-                    ret += str(abs(coeff))
+                ret += str(abs(coeff))
                 return ret
-            if coeff == 1:
+            if abs(coeff) == 1:
                 coeff = ""
-            if coeff == -1:
-                coeff = "-"
-            if degree == 1:
-                degree = ""
             if not isinstance(coeff, str):
-                if coeff % 1 == 0:
-                    coeff = int(coeff)
+                if coeff.denominator == 0:
+                    coeff = coeff.numerator
                 coeff = str(abs(coeff))
             ret += f"{coeff}{self.variable}{numToSuperScript(degree)}"
             return ret
             
+        self._trimCoefficients()
+        if self.coefficients == []:
+            return "0"
         ret = ""
-        for i, coeff in enumerate(reversed(self.coefficients)):
-            degree = len(self.coefficients) - i - 1
+        ret = addFirstTerm(self.coefficients[-1], len(self.coefficients) - 1, ret)
+        if len(self.coefficients) == 1:
+            return ret
+        for i, coeff in enumerate(reversed(self.coefficients[:-1])):
+            degree = len(self.coefficients) - i - 2
             ret = addTerm(coeff, degree, ret)
         return ret
     

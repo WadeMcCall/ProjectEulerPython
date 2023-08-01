@@ -1,8 +1,13 @@
 import math
 
 class Fraction:
-    def __init__(self, numerator, denominator, reduce=True):
-        assert type(numerator) is int and type(denominator) is int
+    def __init__(self, numerator, denominator=1, reduce=True):
+        if type(numerator) is float:
+            numerator, denominator = numerator.as_integer_ratio()
+        if type(numerator) is Fraction and type(denominator) is Fraction:
+            result = numerator / denominator
+            numerator, denominator = result.numerator, result.denominator
+        assert type(numerator) is int and type(denominator) is int, f"numerator: {numerator}, denominator: {denominator}"
         self.numerator = numerator
         self.denominator = denominator
         if reduce:
@@ -10,7 +15,13 @@ class Fraction:
             self.reduce()
     
     def reduce(self):
-        if self.numerator == 0 or self.denominator == 0:
+        if self.numerator < 0 and self.denominator < 0 or self.denominator < 0:
+            self.numerator *= -1
+            self.denominator *= -1
+        if self.numerator == 0:
+            self.denominator = 1
+            return
+        if self.denominator == 0: # undefined fraction
             return
         gcd = math.gcd(self.numerator, self.denominator)
         self.numerator //= gcd
@@ -34,13 +45,15 @@ class Fraction:
         elif type(x) is int:
             result.numerator -= x * result.denominator
         else:
-            return NotImplementedError
+            raise NotImplementedError
         if self.continueReducing:
             result.reduce()
         return result
 
     def __add__(self, x):
         result = Fraction(self.numerator, self.denominator)
+        if type(x) is float:
+            x = Fraction(x)
         if type(x) is Fraction:
             lcm = math.lcm(result.denominator, x.denominator)
             x.numerator *= (lcm // x.denominator)
@@ -50,28 +63,42 @@ class Fraction:
         elif type(x) is int:
             result.numerator += x * result.denominator
         else:
-            return NotImplementedError
+            print(type(x), "is not supported")
+            raise NotImplementedError
         if self.continueReducing:
             result.reduce()
         return result
     
+    def __radd__(self, x):
+        return self.__add__(x)
+    
     def __mul__(self, x):
         result = Fraction(self.numerator, self.denominator)
+        if type(x) is float:
+            x = Fraction(x)
         if type(x) is Fraction:
             result.numerator *= x.numerator
             result.denominator *= x.denominator
         elif type(x) is int:
             result.numerator *= x
         else:
-            return NotImplementedError
+            raise NotImplementedError
         if self.continueReducing:
             result.reduce()
         return result
     
     def __truediv__(self, x):
-        result = Fraction(self.numerator, self.denominator)
-        result = result.reciprocal()
-        return result * x
+        if type(x) is float:
+            x = Fraction(x)
+        if type(x) is Fraction:
+            result = x.reciprocal()
+            result = result * self
+        elif type(x) is int:
+            result = Fraction(self.numerator, self.denominator * x)
+        if self.continueReducing:
+            result.reduce()
+        print(f"{self} * {x} = {result}")
+        return result
     
     def mixedForm(self):
         if self.numerator > self.denominator:
