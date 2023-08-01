@@ -304,7 +304,7 @@ def getSuDoku(file):
     return
 
 def main():
-    file = open("data/sudoku.txt", "r")
+    file = open("../data/sudoku.txt", "r")
     sum = 0
     for sudo in getSuDoku(file):
         sudo.solve()

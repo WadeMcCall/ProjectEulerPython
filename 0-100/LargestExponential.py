@@ -5,7 +5,7 @@ def findMagnitude(base, exp):
     return (exp * math.log10(base)) + 1
 
 def main():
-    file = open("data/base_exp.txt", "r")
+    file = open("../data/base_exp.txt", "r")
     max = 0
     maxline = 0
     i = 1

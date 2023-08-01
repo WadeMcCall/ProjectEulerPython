@@ -25,7 +25,7 @@ def isEnglish(msg):
     return False
 
 def main():
-    f = open("data/0059_cipher.txt")
+    f = open("../data/0059_cipher.txt")
     fileStr = f.read()
     valuesArr = [eval(i) for i in fileStr.split(",")]
     tempVals = []

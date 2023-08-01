@@ -264,7 +264,7 @@ def getHands(cardsStr):
     return p1, p2
 
 def main():
-    f = open("data/poker.txt", "r")
+    f = open("../data/poker.txt", "r")
     sum = 0
     for x in f:
         p1, p2 = getHands(x)

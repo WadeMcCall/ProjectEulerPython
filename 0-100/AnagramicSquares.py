@@ -1,6 +1,5 @@
 from math import isqrt
 from itertools import combinations, permutations
-import time
 
 digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -53,7 +52,7 @@ def getNumDifferentLetters(word):
     return len(letters)
 
 def getWords():
-    file = open("data/words.txt", "r")
+    file = open("../data/words.txt", "r")
     words = file.read().split(",")
     #remove quotes
     words = [word[1:-1] for word in words]

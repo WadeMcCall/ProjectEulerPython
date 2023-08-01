@@ -46,7 +46,7 @@ class Node:
         
 
 def getGraph():
-    f = open("data/Matrix82.txt", "r")
+    f = open("../data/Matrix82.txt", "r")
     matrix = []
     for line in f:
         matrix.append([int(x) for x in line.split(",")])

@@ -1,7 +1,7 @@
 import copy
 
 def getMatrix():
-    f = open("data/matrix.txt", "r")
+    f = open("../data/matrix.txt", "r")
     matrix = []
     for line in f:
         matrix.append([int(x) for x in line.split(",")])

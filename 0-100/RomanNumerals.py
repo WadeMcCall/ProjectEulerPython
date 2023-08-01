@@ -1,7 +1,7 @@
 from lib.RomanNumeral import RomanNumeral
 
 def main():
-    f = open("data/roman.txt", "r")
+    f = open("../data/roman.txt", "r")
     sum = 0
     for line in f:
         r = RomanNumeral(line.strip())

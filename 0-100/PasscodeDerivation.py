@@ -1,5 +1,5 @@
 def readFile():
-    f = open("data/keylog.txt", "r")
+    f = open("../data/keylog.txt", "r")
     passcodes = []
     for code in f:
         passcodes.append(code.strip())
