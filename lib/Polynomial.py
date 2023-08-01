@@ -42,7 +42,6 @@ class Polynomial:
                     poly = term * poly
             poly *= yi
             finalPoly += poly
-            print(finalPoly)
         return finalPoly
 
     def _createCoefficients(self, coefficients):

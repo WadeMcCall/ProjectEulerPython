@@ -97,7 +97,6 @@ class Fraction:
             result = Fraction(self.numerator, self.denominator * x)
         if self.continueReducing:
             result.reduce()
-        print(f"{self} * {x} = {result}")
         return result
     
     def mixedForm(self):
