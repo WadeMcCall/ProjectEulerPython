@@ -1,10 +1,13 @@
 import math
 
 class Fraction:
-    def __init__(self, numerator, denominator):
+    def __init__(self, numerator, denominator, reduce=True):
         assert type(numerator) is int and type(denominator) is int
         self.numerator = numerator
         self.denominator = denominator
+        if reduce:
+            self.continueReducing = True
+            self.reduce()
     
     def reduce(self):
         if self.numerator == 0 or self.denominator == 0:
@@ -19,19 +22,56 @@ class Fraction:
     def evaluate(self):
         assert self.denominator != 0
         return self.numerator / self.denominator
-
-    def __add__(self, x):
+    
+    def __sub__(self, x):
+        result = Fraction(self.numerator, self.denominator)
         if type(x) is Fraction:
             lcm = math.lcm(self.denominator, x.denominator)
             x.numerator *= (lcm // x.denominator)
-            self.numerator *= (lcm // self.denominator)
-            self.denominator = lcm
-            self.numerator += x.numerator
-            return self
+            result.numerator *= (lcm // self.denominator)
+            result.denominator = lcm
+            result.numerator -= x.numerator
         elif type(x) is int:
-            self.numerator += x * self.denominator
-            return self
-        return NotImplementedError
+            result.numerator -= x * result.denominator
+        else:
+            return NotImplementedError
+        if self.continueReducing:
+            result.reduce()
+        return result
+
+    def __add__(self, x):
+        result = Fraction(self.numerator, self.denominator)
+        if type(x) is Fraction:
+            lcm = math.lcm(result.denominator, x.denominator)
+            x.numerator *= (lcm // x.denominator)
+            result.numerator *= (lcm // self.denominator)
+            result.denominator = lcm
+            result.numerator += x.numerator
+        elif type(x) is int:
+            result.numerator += x * result.denominator
+        else:
+            return NotImplementedError
+        if self.continueReducing:
+            result.reduce()
+        return result
+    
+    def __mul__(self, x):
+        result = Fraction(self.numerator, self.denominator)
+        if type(x) is Fraction:
+            result.numerator *= x.numerator
+            result.denominator *= x.denominator
+        elif type(x) is int:
+            result.numerator *= x
+        else:
+            return NotImplementedError
+        if self.continueReducing:
+            result.reduce()
+        return result
+    
+    def __truediv__(self, x):
+        result = Fraction(self.numerator, self.denominator)
+        result = result.reciprocal()
+        return result * x
     
     def mixedForm(self):
         if self.numerator > self.denominator:
