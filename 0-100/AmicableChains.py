@@ -1,5 +1,4 @@
 from lib.convenience import properFactors
-import time
 
 LIMIT = 10 ** 6
 chains = [0 for _ in range(LIMIT+ 1)] 

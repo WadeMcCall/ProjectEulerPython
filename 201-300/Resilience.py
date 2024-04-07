@@ -1,6 +1,7 @@
 from lib.TotientFunctions import findAllPhiUnderX, phi
 from lib.primes import getNextPrimeGenerator, getPrimeArray
 from lib.Fraction import Fraction
+from lib.convenience import countDivisors
 
 primes = getPrimeArray(1000000)
 
@@ -33,8 +34,14 @@ def getNextArrAs(arrAs):
 
 def highlyCompositeNumberGenerator():
     arrAs = [1]
+    mostDivisors = 1
+    i = 6
     while True:
-        
+        d = countDivisors(i)
+        if d > mostDivisors:
+            mostDivisors = d
+            yield i
+        i += 2
 
 def findResilience(d):
     return Fraction(phi(d),(d-1))
@@ -43,16 +50,13 @@ def main():
     GOAL = 15499/94744
     record = Fraction(1,1)
     d = 6469693230
-    while True:
-        Rd = findResilience(d)
+    gen = highlyCompositeNumberGenerator()
+    for num in gen:
+        Rd = findResilience(num)
         if(Rd < record):
-            print(d, Rd)
+            print(num, Rd)
             print (Rd < GOAL)
             record = Rd
-        d += 2
-    max = 0
-    gen = getPromorialNumGenerator()
-    print(findResilience(6469693230) < GOAL)
     return
     for n in gen:
         print(n)
